@@ -1,20 +1,23 @@
+import { ImageBackground, StyleSheet, Text } from "react-native";
+import AddTask from "./Components/AddTaskApp/AddTask";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!!! Sumanth 123</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <StatusBar style="light" />
+      <ImageBackground
+        source={require("./assets/images/background.png")}
+        style={{ flex: 1 }}
+        resizeMode="cover"
+        imageStyle={{ opacity: 0.6 }}
+      >
+        <SafeAreaView style={{ flex: 1 }}>
+          {" "}
+          {/* Ensures content is within safe area boundaries */}
+          <AddTask />
+        </SafeAreaView>
+      </ImageBackground>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
