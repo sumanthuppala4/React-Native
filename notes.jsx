@@ -28,7 +28,21 @@ for Android
    >
       <Text>Press Me</Text>
    </Pressable>
+
+4. To add navigation we need use createStaticNavigation function from @react-navigation/native package and create a stack navigator using createStackNavigator function from @react-navigation/stack package.
+   const MyStack = createStackNavigator({
+    screens: {
+      Categories: Categories,
+      Meals: OverviewScreen,
+    },
+   });
+   const Navigation = createStaticNavigation(MyStack);
+   return <Navigation />;
+   
+
    */
+
+
 
    
 
