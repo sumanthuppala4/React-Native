@@ -7,25 +7,85 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import OverviewScreen from "./Components/Meals/OverviewScreen";
 import MealDetails from "./Components/MealDetail/MealDetail";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import GreetingScreen from "./screens/GreetingScreen";
+import UserScreen from "./screens/UserScreen";
+import { Ionicons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import FavouriteScreen from "./screens/FavouriteScreen";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const Stack = createStackNavigator();
 
-export default function App() {
-  /*   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "white",
-        borderColor: "red",
-        borderWidth: 2,
-      }}
-    >
-      {" "}
-      <OverviewScreen />{" "}
-    </SafeAreaView>
-  );
+const Drawer = createDrawerNavigator();
+const BottomTab = createBottomTabNavigator();
 
-  return <Navigation />; */
+function DrawerNavigator() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Categories" component={Categories} />
+      <Drawer.Screen name="Favourites" component={FavouriteScreen} />
+      <Drawer.Screen name="Add Task" component={AddTask} />
+    </Drawer.Navigator>
+  );
+}
+
+export default function App() {
+  let currentNavigationType = "Nested";
+
+  if (currentNavigationType === "BottomTabs") {
+    return (
+      <>
+        <NavigationContainer>
+          <BottomTab.Navigator>
+            <BottomTab.Screen
+              name="welcome"
+              component={GreetingScreen}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="home" color={color} size={size} />
+                ),
+              }}
+            />
+            <BottomTab.Screen
+              name="Users"
+              component={UserScreen}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="person" color={color} size={size} />
+                ),
+              }}
+            />
+          </BottomTab.Navigator>
+        </NavigationContainer>
+      </>
+    );
+  }
+
+  if (currentNavigationType === "Drawer") {
+    return (
+      <>
+        <NavigationContainer>
+          <Drawer.Navigator>
+            <Drawer.Screen
+              name="welcome"
+              component={GreetingScreen}
+              options={{
+                headerStyle: { backgroundColor: "red" },
+                headerTintColor: "white",
+                drawerLabel: "Welcome User",
+                drawerIcon: ({ color, size }) => (
+                  <Ionicons name="home" color={color} size={size} />
+                ),
+              }}
+            />
+            <Drawer.Screen name="Users" component={UserScreen} />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </>
+    );
+  }
 
   return (
     <>
@@ -39,14 +99,19 @@ export default function App() {
         <SafeAreaView style={{ flex: 1 }}>
           {/* Ensures content is within safe area boundaries */}
           {/*  <AddTask /> */}
-          <NavigationContainer>
-            <Stack.Navigator>
-              {/*  <Stack.Screen name="AddTask" component={AddTask} /> */}
-              <Stack.Screen name="Categories" component={Categories} />
-              <Stack.Screen
-                name="Overview"
-                component={OverviewScreen}
-                /*  options={({ route, navigation }) => {
+          <Provider store={store}>
+            <NavigationContainer>
+              <Stack.Navigator>
+                {/*  <Stack.Screen name="AddTask" component={AddTask} /> */}
+                <Stack.Screen
+                  name="Drawer"
+                  component={DrawerNavigator}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Overview"
+                  component={OverviewScreen}
+                  /*  options={({ route, navigation }) => {
                   const catId = route.params.categoryId;
 
                   return {
@@ -56,11 +121,12 @@ export default function App() {
                   
                 */
 
-                /* The above code is to set dynamic title for pages */
-              />
-              <Stack.Screen name="MealDetails" component={MealDetails} />
-            </Stack.Navigator>
-          </NavigationContainer>
+                  /* The above code is to set dynamic title for pages */
+                />
+                <Stack.Screen name="MealDetails" component={MealDetails} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </Provider>
         </SafeAreaView>
       </ImageBackground>
     </>

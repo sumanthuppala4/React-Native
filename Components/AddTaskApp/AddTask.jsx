@@ -44,7 +44,7 @@ const AddTask = () => {
             data={tasks}
             renderItem={(itemData) => (
               <TaskComponent
-                text={itemData.item.text}
+                textContent={itemData.item.text}
                 id={itemData.item.id}
                 onDeleteTask={deleteTaskHandler}
               />

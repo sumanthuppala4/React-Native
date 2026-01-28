@@ -4,10 +4,19 @@ import { MEALS } from "../../data/dummy-data";
 import { useLayoutEffect } from "react";
 import IconButton from "../Common/IconButton";
 
+import { useSelector, useDispatch } from "react-redux";
+import { addFavourite, removeFavourite } from "../../store/favourites";
+
 function MealDetails({ navigation }) {
   const route = useRoute();
 
+  const dispatch = useDispatch();
+
   const mealId = route.params.mealId;
+
+  const favouriteMealIds = useSelector((state) => state.favouriteMeals.ids);
+
+  const isSelected = favouriteMealIds.includes(mealId);
 
   const selectedMeal = MEALS.filter((meal) => meal.id === mealId)?.[0];
 
@@ -17,13 +26,18 @@ function MealDetails({ navigation }) {
         return (
           <IconButton
             onPress={() => {
-              console.log("hi");
+              if (isSelected) {
+                dispatch(removeFavourite({ id: mealId }));
+              } else {
+                dispatch(addFavourite({ id: mealId }));
+              }
             }}
+            isSelected={isSelected}
           />
         );
       },
     });
-  }, [navigation]);
+  }, [navigation, dispatch, addFavourite, mealId, isSelected]);
 
   return (
     <>

@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 
-const TaskComponent = ({ text, onDeleteTask, id }) => {
+const TaskComponent = ({ textContent, onDeleteTask, id }) => {
   const { width, height } = useWindowDimensions(); // Get current window dimensions when we rotate the screen
 
   const marginTopDistance = height < 400 ? 2 : 5; // Adjust marginTop based on height
@@ -29,7 +29,7 @@ const TaskComponent = ({ text, onDeleteTask, id }) => {
             android_ripple={{ color: "#210644" }}
             style={({ pressed }) => (pressed ? { opacity: 0.5 } : null)}
           >
-            <Text style={styles.taskText}>{text} </Text>
+            <Text style={styles.taskText}>{textContent} </Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
