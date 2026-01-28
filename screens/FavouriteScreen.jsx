@@ -10,7 +10,6 @@ function FavouriteScreen() {
     favouriteMealIds.includes(item.id)
   );
 
-  console.log(favouriteMealIds);
 
   return <MealsList data={favouriteMeals} />;
 }

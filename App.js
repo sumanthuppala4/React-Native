@@ -1,4 +1,4 @@
-import { ImageBackground } from "react-native";
+import { Button, ImageBackground } from "react-native";
 import AddTask from "./Components/AddTaskApp/AddTask";
 import { StatusBar } from "expo-status-bar";
 import Categories from "./Components/CategoriesApp/Categories";
@@ -13,8 +13,12 @@ import UserScreen from "./screens/UserScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FavouriteScreen from "./screens/FavouriteScreen";
-import { Provider } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./store/store";
+import LoginScreen from "./screens/LoginScreen";
+import { addAuthentication, removeAuthentication } from "./store/favourites";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
 
 const Stack = createStackNavigator();
 
@@ -87,6 +91,79 @@ export default function App() {
     );
   }
 
+  function AuthorizedScreens() {
+    const dispatch = useDispatch();
+    return (
+      <Stack.Navigator>
+        {/*  <Stack.Screen name="AddTask" component={AddTask} /> */}
+
+        <Stack.Screen
+          name="Drawer"
+          component={DrawerNavigator}
+          options={{
+            headerRight: () => {
+              return (
+                <Button
+                  title={"LogOut"}
+                  onPress={() => {
+                    dispatch(removeAuthentication());
+                    AsyncStorage.removeItem("token");
+                  }}
+                />
+              );
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Overview"
+          component={OverviewScreen}
+          /*  options={({ route, navigation }) => {
+                  const catId = route.params.categoryId;
+
+                  return {
+                    title: catId,
+                  };
+                }}
+                  
+                */
+
+          /* The above code is to set dynamic title for pages */
+        />
+        <Stack.Screen name="MealDetails" component={MealDetails} />
+      </Stack.Navigator>
+    );
+  }
+
+  function UnAuthorizedScreens() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginScreen} />
+      </Stack.Navigator>
+    );
+  }
+
+  function GetScreens() {
+    const dispatch = useDispatch();
+    const { isAuthenticated, token } = useSelector(
+      (state) => state.favouriteMeals,
+    );
+
+    useEffect(() => {
+      const getAsyncStorageToken = async () => {
+        const storedToken = await AsyncStorage.getItem("token");
+
+        if (storedToken) {
+          dispatch(addAuthentication(storedToken));
+        }
+      };
+
+      getAsyncStorageToken();
+    }, []);
+
+
+    return token ? <AuthorizedScreens /> : <UnAuthorizedScreens />;
+  }
+
   return (
     <>
       <StatusBar style="light" />
@@ -101,30 +178,7 @@ export default function App() {
           {/*  <AddTask /> */}
           <Provider store={store}>
             <NavigationContainer>
-              <Stack.Navigator>
-                {/*  <Stack.Screen name="AddTask" component={AddTask} /> */}
-                <Stack.Screen
-                  name="Drawer"
-                  component={DrawerNavigator}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="Overview"
-                  component={OverviewScreen}
-                  /*  options={({ route, navigation }) => {
-                  const catId = route.params.categoryId;
-
-                  return {
-                    title: catId,
-                  };
-                }}
-                  
-                */
-
-                  /* The above code is to set dynamic title for pages */
-                />
-                <Stack.Screen name="MealDetails" component={MealDetails} />
-              </Stack.Navigator>
+              <GetScreens />
             </NavigationContainer>
           </Provider>
         </SafeAreaView>
