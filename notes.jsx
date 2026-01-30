@@ -38,12 +38,9 @@ for Android
    });
    const Navigation = createStaticNavigation(MyStack);
    return <Navigation />;
+
+
+5. useFocused will be true only on atcive page from the stack of pages
    
 
    */
-
-
-
-   
-
-

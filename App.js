@@ -19,18 +19,32 @@ import LoginScreen from "./screens/LoginScreen";
 import { addAuthentication, removeAuthentication } from "./store/favourites";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
+import Places from "./screens/Places";
+import Map from "./screens/Map";
+import LocalNotificationScreen from "./screens/LocalNotificationScreen";
 
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
 const BottomTab = createBottomTabNavigator();
 
+function PlacesNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Places Stack" component={Places} />
+      <Stack.Screen name="Map" component={Map} />
+    </Stack.Navigator>
+  );
+}
+
 function DrawerNavigator() {
   return (
     <Drawer.Navigator>
+      <Drawer.Screen name="Places" component={PlacesNavigator} />
       <Drawer.Screen name="Categories" component={Categories} />
       <Drawer.Screen name="Favourites" component={FavouriteScreen} />
       <Drawer.Screen name="Add Task" component={AddTask} />
+      <Drawer.Screen name="Notifications" component={LocalNotificationScreen} />
     </Drawer.Navigator>
   );
 }
@@ -159,7 +173,6 @@ export default function App() {
 
       getAsyncStorageToken();
     }, []);
-
 
     return token ? <AuthorizedScreens /> : <UnAuthorizedScreens />;
   }
