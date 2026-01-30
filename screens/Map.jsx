@@ -18,14 +18,9 @@ export default function Map({ navigation }) {
     const lng = e.nativeEvent.coordinate.longitude;
 
     setSelectedLocation({ lat, lng });
-
-    
   }
 
   function saveLocationHandler() {
-
-    console.log({selectedLocation})
-
     if (!selectedLocation) {
       Alert.alert("No Location Picked", "Choose one location");
       return;
@@ -43,7 +38,7 @@ export default function Map({ navigation }) {
         <IconButton isMaps={true} onPress={saveLocationHandler} />
       ),
     });
-  }, [navigation,selectedLocation]);
+  }, [navigation, selectedLocation]);
 
   return (
     <MapView

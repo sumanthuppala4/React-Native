@@ -23,6 +23,19 @@ import Places from "./screens/Places";
 import Map from "./screens/Map";
 import LocalNotificationScreen from "./screens/LocalNotificationScreen";
 
+import * as Notifications from "expo-notifications";
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowAlert: true,
+    };
+  },
+});
+
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
@@ -40,11 +53,11 @@ function PlacesNavigator() {
 function DrawerNavigator() {
   return (
     <Drawer.Navigator>
+      <Drawer.Screen name="Notifications" component={LocalNotificationScreen} />
       <Drawer.Screen name="Places" component={PlacesNavigator} />
       <Drawer.Screen name="Categories" component={Categories} />
       <Drawer.Screen name="Favourites" component={FavouriteScreen} />
       <Drawer.Screen name="Add Task" component={AddTask} />
-      <Drawer.Screen name="Notifications" component={LocalNotificationScreen} />
     </Drawer.Navigator>
   );
 }
